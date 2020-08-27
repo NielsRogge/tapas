@@ -573,6 +573,8 @@ def _predict_for_set(
       add_answer=use_answer_as_supervision,
       include_id=False)
   result = estimator.predict(input_fn=predict_input_fn)
+  print("Pooled output:")
+  print(result["pooled_output"])
   exp_prediction_utils.write_predictions(
       result,
       prediction_file,

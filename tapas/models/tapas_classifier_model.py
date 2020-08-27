@@ -1038,6 +1038,10 @@ def model_fn_builder(config):
           "row_ids": features["row_ids"],
           "segment_ids": features["segment_ids"],
           "question_id_ints": features["question_id_ints"],
+          "pooled_output": model.pooled_output(),
+          "sequence_output": model.sequence_output(),
+          "all_encoder_layers": model.get_all_encoder_layers(),
+
       }
       # TODO Remove once the data has been updated.
       if "question_id" in features:
