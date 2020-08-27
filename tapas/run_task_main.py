@@ -574,8 +574,8 @@ def _predict_for_set(
       include_id=False)
   result = estimator.predict(input_fn=predict_input_fn)
   print("Pooled output:")
-  print(result["pooled_output"])
-  print(type(result["pooled_output"]))
+  print(type(result))
+  print(result[0]["pooled_output"])
   exp_prediction_utils.write_predictions(
       result,
       prediction_file,
