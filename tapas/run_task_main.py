@@ -576,7 +576,8 @@ def _predict_for_set(
   print("Pooled output:")
   print(type(result))
   for prediction in result:
-    print(prediction["pooled_output"].get_weights()[0])
+    print(type(prediction))
+    #print(prediction["pooled_output"].get_weights()[0])
   exp_prediction_utils.write_predictions(
       result,
       prediction_file,
