@@ -576,7 +576,7 @@ def _predict_for_set(
   print("Pooled output:")
   print(type(result))
   for prediction in result:
-    print(type(prediction))
+    print(prediction["column_ids"])
   exp_prediction_utils.write_predictions(
       result,
       prediction_file,
