@@ -579,7 +579,7 @@ def _predict_for_set(
     print(i)
     print(type(prediction))
     print(type(prediction['pooled_output']))
-    print(prediction["pooled_output"].get_weights()[0])
+    print(prediction["pooled_output"].shape)
   exp_prediction_utils.write_predictions(
       result,
       prediction_file,
