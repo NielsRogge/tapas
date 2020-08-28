@@ -575,8 +575,11 @@ def _predict_for_set(
   result = estimator.predict(input_fn=predict_input_fn)
   print("Pooled output:")
   print(type(result))
-  for prediction in result:
-    print(prediction["pooled_output"])
+  for i, prediction in enumerate(result):
+    print(i)
+    print(type(prediction))
+    print(type(prediction['pooled_output']))
+    print(prediction["pooled_output"].get_weights()[0]))
   exp_prediction_utils.write_predictions(
       result,
       prediction_file,
