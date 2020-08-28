@@ -1040,7 +1040,7 @@ def model_fn_builder(config):
           "question_id_ints": features["question_id_ints"],
           "pooled_output": model.get_pooled_output(),
           "sequence_output": model.get_sequence_output(),
-          "all_encoder_layers": model.get_all_encoder_layers(),
+          #"all_encoder_layers": model.get_all_encoder_layers(),
 
       }
       # TODO Remove once the data has been updated.
