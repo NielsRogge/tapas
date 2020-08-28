@@ -575,8 +575,8 @@ def _predict_for_set(
   result = estimator.predict(input_fn=predict_input_fn)
   print("Pooled output:")
   print(type(result))
-  #for prediction in result:
-  #  print(prediction["column_ids"])
+  for prediction in result:
+    print(prediction["pooled_output"])
   exp_prediction_utils.write_predictions(
       result,
       prediction_file,
