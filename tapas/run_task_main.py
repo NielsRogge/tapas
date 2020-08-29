@@ -573,13 +573,15 @@ def _predict_for_set(
       add_answer=use_answer_as_supervision,
       include_id=False)
   result = estimator.predict(input_fn=predict_input_fn)
-  print("Pooled output:")
   print(type(result))
   for i, prediction in enumerate(result):
     print(i)
-    print(type(prediction))
-    print(type(prediction['pooled_output']))
-    print(prediction["pooled_output"])
+    print("Pooled output:")
+    print(prediction["pooled_output"]) # prediction is a dictionary, the pooled output a numpy ndarray
+    print("Shape of sequence output:")
+    print(prediction["sequence_output"].shape)
+    print("Sequence output:")
+    print(prediction["sequence_output"])
   exp_prediction_utils.write_predictions(
       result,
       prediction_file,
