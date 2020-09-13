@@ -442,6 +442,8 @@ def _calculate_aggregate_mask(answer, output_layer_aggregation, output_bias_agg,
       tf.zeros_like(aggregate_mask_init, dtype=tf.float32), aggregate_mask_init)
   aggregate_mask = tf.stop_gradient(aggregate_mask)
   
+  print("Aggregate mask:")
+  print(aggregate_mask)
   aggregate_mask = tf.Print(aggregate_mask,
                             [aggregate_mask],
                             "Aggregate mask"
