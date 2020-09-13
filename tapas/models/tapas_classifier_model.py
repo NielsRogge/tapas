@@ -261,6 +261,9 @@ def _calculate_aggregation_loss(logits_aggregation, aggregate_mask,
     # Add aggregation loss for numeric answers that need aggregation.
     per_example_aggregation_loss += _calculate_aggregation_loss_unknown(
         logits_aggregation, aggregate_mask)
+  print("Total aggregation loss:")
+  print(config.aggregation_loss_importance * per_example_aggregation_loss)
+  
   return config.aggregation_loss_importance * per_example_aggregation_loss
 
 
@@ -436,6 +439,8 @@ def _calculate_aggregate_mask(answer, output_layer_aggregation, output_bias_agg,
       tf.logical_and(is_pred_cell_selection, is_cell_supervision_available),
       tf.zeros_like(aggregate_mask_init, dtype=tf.float32), aggregate_mask_init)
   aggregate_mask = tf.stop_gradient(aggregate_mask)
+  print("Aggregate mask:")
+  print(aggregate_mask)
   return aggregate_mask
 
 
