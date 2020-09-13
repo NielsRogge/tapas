@@ -262,7 +262,7 @@ def _calculate_aggregation_loss(logits_aggregation, aggregate_mask,
     per_example_aggregation_loss += _calculate_aggregation_loss_unknown(
         logits_aggregation, aggregate_mask)
   print("Total aggregation loss:")
-  print( (config.aggregation_loss_importance * per_example_aggregation_loss).numpy() )
+  with tf.Session() as sess:  print((config.aggregation_loss_importance * per_example_aggregation_loss).eval()) 
   
   return config.aggregation_loss_importance * per_example_aggregation_loss
 
@@ -440,7 +440,7 @@ def _calculate_aggregate_mask(answer, output_layer_aggregation, output_bias_agg,
       tf.zeros_like(aggregate_mask_init, dtype=tf.float32), aggregate_mask_init)
   aggregate_mask = tf.stop_gradient(aggregate_mask)
   print("Aggregate mask:")
-  print(aggregate_mask.numpy())
+  with tf.Session() as sess:  print(aggregate_mask.eval()) 
   return aggregate_mask
 
 
