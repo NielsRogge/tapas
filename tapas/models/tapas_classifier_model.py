@@ -478,6 +478,10 @@ def compute_token_logits(output_layer, temperature,
       "output_bias", shape=(), initializer=tf.zeros_initializer())
   logits = (tf.einsum("bsj,j->bs", output_layer, output_weights) +
             output_bias) / temperature
+  logits_shape = tf.shape(logits)
+  print("Shape of token logits:")
+  print(logits_shape)
+  
   logits = tf.Print(logits,
                             [logits],
                             "Token logits"
