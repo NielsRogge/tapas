@@ -196,8 +196,9 @@ def _calculate_aggregation_logits(output_layer_aggregation, output_weights_agg,
   logits_aggregation = tf.Print(logits_aggregation,
                             [logits_aggregation],
                             "Aggregation logits",
-                            summarize=-1)
-  ) 
+                            summarize=-1
+  )
+   
   return logits_aggregation
 
 
@@ -486,7 +487,7 @@ def compute_token_logits(output_layer, temperature,
   logits = tf.Print(logits,
                     [logits],
                     "Token logits",
-                    summarize=-1)
+                    summarize=-1
   )
   
   return logits
