@@ -673,19 +673,18 @@ def _get_classification_outputs(
       batch_dims=1)
   cell_index = segmented_tensor.ProductIndexMap(row_index, col_index)
 
-  print("Cell index:")
-  cell_index.indices = tf.Print(cell_index.indices,
-                            [cell_index.indices[0]],
-                            "Cell indices of first element in batch",
-                            summarize=-1
-  )
-
   # Masks.
   # <float32>[batch_size, seq_length]
   input_mask_float = tf.cast(input_mask, tf.float32)
   table_mask_float = tf.cast(table_mask, tf.float32)
   # Mask for cells that exist in the table (i.e. that are not padding).
   cell_mask, _ = segmented_tensor.reduce_mean(input_mask_float, cell_index)
+
+  cell_mask = tf.Print(cell_mask,
+                            [cell_mask],
+                            "Cell mask",
+                            summarize=-1
+  )
 
   # Compute logits per token. These are used to select individual cells.
   logits = compute_token_logits(
