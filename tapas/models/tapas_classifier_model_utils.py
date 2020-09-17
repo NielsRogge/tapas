@@ -83,6 +83,12 @@ def compute_column_logits(output_layer,
   column_logits, out_index = segmented_tensor.reduce_sum(
       cell_logits * cell_mask, column_index)
 
+  out_index.indices = tf.Print(out_index.indices,
+                            [out_index.indices],
+                            "Out index indices",
+                            summarize=-1
+  )
+  
   column_logits = tf.Print(column_logits,
                             [column_logits],
                             "Column logits after averaging",
