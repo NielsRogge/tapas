@@ -674,7 +674,7 @@ def _get_classification_outputs(
   cell_index = segmented_tensor.ProductIndexMap(row_index, col_index)
 
   print("Cell index:")
-  cell_index = tf.Print(cell_index,
+  cell_index.indices = tf.Print(cell_index.indices,
                             [cell_index.indices[0]],
                             "Cell indices of first element in batch",
                             summarize=-1
