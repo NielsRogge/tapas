@@ -83,18 +83,18 @@ def compute_column_logits(output_layer,
   column_logits, out_index = segmented_tensor.reduce_sum(
       cell_logits * cell_mask, column_index)
 
-  cell_logits = tf.Print(cell_logits,
-                            [cell_logits],
-                            "Cell logits after averaging",
+  column_logits = tf.Print(column_logits,
+                            [column_logits],
+                            "Column logits after averaging",
                             summarize=-1
   )
   
   cell_count, _ = segmented_tensor.reduce_sum(cell_mask, column_index)
   column_logits /= cell_count + EPSILON_ZERO_DIVISION
 
-  cell_logits = tf.Print(cell_logits,
-                            [cell_logits],
-                            "Cell logits after cell count",
+  column_logits = tf.Print(column_logits,
+                            [column_logits],
+                            "Column logits after cell count",
                             summarize=-1
   )
 
@@ -103,9 +103,9 @@ def compute_column_logits(output_layer,
                               tf.not_equal(out_index.indices, 0))
   column_logits += CLOSE_ENOUGH_TO_LOG_ZERO * tf.cast(is_padding, tf.float32)
 
-  cell_logits = tf.Print(cell_logits,
-                            [cell_logits],
-                            "Cell logits after padding",
+  column_logits = tf.Print(column_logits,
+                            [column_logits],
+                            "Column logits after padding",
                             summarize=-1
   )
 
