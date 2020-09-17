@@ -101,6 +101,13 @@ def compute_column_logits(output_layer,
   # Mask columns that do not appear in the example.
   is_padding = tf.logical_and(cell_count < 0.5,
                               tf.not_equal(out_index.indices, 0))
+
+  is_padding = tf.Print(is_padding,
+                            [is_padding],
+                            "Is padding",
+                            summarize=-1
+  )
+  
   column_logits += CLOSE_ENOUGH_TO_LOG_ZERO * tf.cast(is_padding, tf.float32)
 
   column_logits = tf.Print(column_logits,
