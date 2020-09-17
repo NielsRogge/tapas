@@ -77,24 +77,37 @@ def compute_column_logits(output_layer,
   # [batch_size, max_num_cols * max_num_rows]
   cell_logits, cell_logits_index = segmented_tensor.reduce_mean(
       token_logits, cell_index)
-    
-  cell_logits = tf.Print(cell_logits,
-                            [cell_logits],
-                            "Cell logits when computing column logits",
-                            summarize=-1
-  )
 
   column_index = cell_index.project_inner(cell_logits_index)
   # [batch_size, max_num_cols]
   column_logits, out_index = segmented_tensor.reduce_sum(
       cell_logits * cell_mask, column_index)
+
+  cell_logits = tf.Print(cell_logits,
+                            [cell_logits],
+                            "Cell logits after averaging",
+                            summarize=-1
+  )
+  
   cell_count, _ = segmented_tensor.reduce_sum(cell_mask, column_index)
   column_logits /= cell_count + EPSILON_ZERO_DIVISION
+
+  cell_logits = tf.Print(cell_logits,
+                            [cell_logits],
+                            "Cell logits after cell count",
+                            summarize=-1
+  )
 
   # Mask columns that do not appear in the example.
   is_padding = tf.logical_and(cell_count < 0.5,
                               tf.not_equal(out_index.indices, 0))
   column_logits += CLOSE_ENOUGH_TO_LOG_ZERO * tf.cast(is_padding, tf.float32)
+
+  cell_logits = tf.Print(cell_logits,
+                            [cell_logits],
+                            "Cell logits after padding",
+                            summarize=-1
+  )
 
   if not allow_empty_column_selection:
     column_logits += CLOSE_ENOUGH_TO_LOG_ZERO * tf.cast(
