@@ -703,6 +703,12 @@ def _get_classification_outputs(
           config.init_cell_selection_weights_to_zero,
         allow_empty_column_selection=config.allow_empty_column_selection)
 
+    column_logits = tf.Print(column_logits,
+                            [column_logits],
+                            "Column logits",
+                            summarize=-1
+    )
+
   # TODO(pawelnow): Extract this into a function.
   # Compute aggregation function logits.
   do_model_aggregation = config.num_aggregation_labels > 0
