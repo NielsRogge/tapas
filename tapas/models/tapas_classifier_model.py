@@ -673,6 +673,9 @@ def _get_classification_outputs(
       batch_dims=1)
   cell_index = segmented_tensor.ProductIndexMap(row_index, col_index)
 
+  print("Cell index:")
+  print(cell_index.indices[0])
+
   # Masks.
   # <float32>[batch_size, seq_length]
   input_mask_float = tf.cast(input_mask, tf.float32)
