@@ -65,12 +65,24 @@ def compute_column_logits(output_layer,
       tf.einsum("bsj,j->bs", output_layer, column_output_weights) +
       column_output_bias)
 
+  token_logits = tf.Print(token_logits,
+                            [token_logits],
+                            "Token logits when computing column logits",
+                            summarize=-1
+  )
+
   # Average the logits per cell and then per column.
   # Note that by linearity it doesn't matter if we do the averaging on the
   # embeddings or on the logits. For performance we do the projection first.
   # [batch_size, max_num_cols * max_num_rows]
   cell_logits, cell_logits_index = segmented_tensor.reduce_mean(
       token_logits, cell_index)
+    
+  cell_logits = tf.Print(cell_logits,
+                            [cell_logits],
+                            "Cell logits when computing column logits",
+                            summarize=-1
+  )
 
   column_index = cell_index.project_inner(cell_logits_index)
   # [batch_size, max_num_cols]
