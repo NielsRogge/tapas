@@ -90,6 +90,14 @@ def compute_column_logits(output_layer,
   )
   
   cell_count, _ = segmented_tensor.reduce_sum(cell_mask, column_index)
+
+  cell_count = tf.Print(cell_count,
+                            [cell_count],
+                            "Cell count",
+                            summarize=-1
+  )
+
+
   column_logits /= cell_count + EPSILON_ZERO_DIVISION
 
   column_logits = tf.Print(column_logits,
