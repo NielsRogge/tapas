@@ -574,9 +574,26 @@ def _predict_for_set(
       include_id=False)
 
   # experiment started: eval_metrics  
-  eval_metrics = estimator.evaluate(predict_input_fn)
+  params = dict(
+        batch_size=4,
+    )
+  eval_input_fn = functools.partial(
+      tapas_classifier_model.input_fn,
+      name='evaluate',
+      file_patterns=example_file,
+      data_format='tfrecord',
+      compression_type=FLAGS.compression_type,
+      is_training=False,
+      max_seq_length=FLAGS.max_seq_length,
+      max_predictions_per_seq=_MAX_PREDICTIONS_PER_SEQ,
+      add_aggregation_function_id=do_model_aggregation,
+      add_classification_labels=False,
+      add_answer=use_answer_as_supervision,
+      include_id=False,
+      params=params)
+  eval_metrics = estimator.evaluate(eval_input_fn)
   # experiment ended
-  
+
   result = estimator.predict(input_fn=predict_input_fn)
   exp_prediction_utils.write_predictions(
       result,
