@@ -572,6 +572,11 @@ def _predict_for_set(
       add_classification_labels=False,
       add_answer=use_answer_as_supervision,
       include_id=False)
+
+  # experiment started: eval_metrics  
+  eval_metrics = estimator.evaluate(predict_input_fn)
+  # experiment ended
+  
   result = estimator.predict(input_fn=predict_input_fn)
   exp_prediction_utils.write_predictions(
       result,
