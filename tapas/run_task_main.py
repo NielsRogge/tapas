@@ -588,9 +588,11 @@ def _predict_for_set(
       add_answer=use_answer_as_supervision,
       include_id=False,
       params= dict(
-        "batch_size"=4
+        batch_size=4
       ) 
   )
+  examples = eval_input_fn
+  print(examples)
   eval_metrics = estimator.evaluate(eval_input_fn)
   # experiment ended
 
