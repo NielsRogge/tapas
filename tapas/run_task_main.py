@@ -591,7 +591,7 @@ def _predict_for_set(
       add_answer=use_answer_as_supervision,
       include_id=False,
       params=params)
-  eval_metrics = estimator.evaluate(eval_input_fn, batch_size = params["batch_size"])
+  eval_metrics = estimator.evaluate(eval_input_fn)
   # experiment ended
 
   result = estimator.predict(input_fn=predict_input_fn)
