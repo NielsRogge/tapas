@@ -576,7 +576,7 @@ def _predict_for_set(
   # experiment: print out eval_metrics  
   params = dict(
         batch_size=4
-        ) 
+  ) 
   eval_input_fn = functools.partial(
       tapas_classifier_model.input_fn,
       name='evaluate',
@@ -591,7 +591,6 @@ def _predict_for_set(
       add_answer=use_answer_as_supervision,
       include_id=False,
       params=params
-      ) 
   )
   eval_metrics = estimator.evaluate(eval_input_fn)
   # experiment ended
