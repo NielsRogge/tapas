@@ -581,7 +581,7 @@ def _predict_for_set(
       include_id=False,
       params=params)
   input_fn_args = function_utils.fn_args(eval_input_fn)
-  print(input_fn_args)
+  print(type(input_fn_args))
 
   eval_metrics = estimator.evaluate(input_fn=eval_input_fn, steps=params["num_eval_steps"])
   # end of experiment
