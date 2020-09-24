@@ -39,6 +39,9 @@ from tapas.utils import tasks
 from tapas.utils import tf_example_utils
 import tensorflow.compat.v1 as tf
 
+# experimental
+from tensorflow.python.util import function_utils
+# end of experimental
 
 tf.disable_v2_behavior()
 
@@ -577,6 +580,9 @@ def _predict_for_set(
       add_answer=use_answer_as_supervision,
       include_id=False,
       params=params)
+  input_fn_args = function_utils.fn_args(eval_input_fn)
+  print(input_fn_args)
+
   eval_metrics = estimator.evaluate(input_fn=eval_input_fn, steps=params["num_eval_steps"])
   # end of experiment
   
