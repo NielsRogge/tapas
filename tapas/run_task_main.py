@@ -566,7 +566,7 @@ def _predict_for_set(
     batch_size = 4,
     num_eval_steps=20,
   )
-  predict_input_fn = functools.partial(
+  eval_input_fn = functools.partial(
       tapas_classifier_model.input_fn,
       name='predict',
       file_patterns=example_file,
@@ -579,7 +579,7 @@ def _predict_for_set(
       add_classification_labels=False,
       add_answer=use_answer_as_supervision,
       include_id=False)
-  input_fn_args = function_utils.fn_args(predict_input_fn)
+  input_fn_args = function_utils.fn_args(eval_input_fn)
   print(input_fn_args)
 
   eval_metrics = estimator.evaluate(input_fn=eval_input_fn, steps=params["num_eval_steps"])
