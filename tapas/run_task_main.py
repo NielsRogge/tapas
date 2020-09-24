@@ -578,7 +578,8 @@ def _predict_for_set(
       add_aggregation_function_id=do_model_aggregation,
       add_classification_labels=False,
       add_answer=use_answer_as_supervision,
-      include_id=False)
+      include_id=False,
+      params=params)
   input_fn_args = function_utils.fn_args(eval_input_fn)
   print(input_fn_args)
 
