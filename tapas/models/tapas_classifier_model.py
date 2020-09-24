@@ -578,6 +578,12 @@ def _single_column_cell_selection_loss(token_logits, column_logits, label_ids,
   selection_loss_per_example += tf.where(
       no_cell_selected, tf.zeros_like(selection_loss_per_example), cell_loss)
 
+  selection_loss_per_example = tf.Print(selection_loss_per_example,
+                            [selection_loss_per_example],
+                            "Cell selection loss per example",
+                            summarize=-1
+  )
+
   # Set the probs outside the selected column (selected by the *model*)
   # to 0. This ensures backwards compatibility with models that select
   # cells from multiple columns.
