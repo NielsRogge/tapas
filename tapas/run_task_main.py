@@ -579,9 +579,10 @@ def _predict_for_set(
       add_classification_labels=False,
       add_answer=use_answer_as_supervision,
       include_id=False,
-      params=params)
+  )
   input_fn_args = function_utils.fn_args(eval_input_fn)
   print(input_fn_args)
+  print(estimator.params)
 
   eval_metrics = estimator.evaluate(input_fn=eval_input_fn, steps=params["num_eval_steps"])
   # end of experiment
