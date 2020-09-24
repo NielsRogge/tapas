@@ -585,6 +585,7 @@ def _predict_for_set(
   print(estimator.params)
 
   eval_metrics = estimator.evaluate(input_fn=eval_input_fn, steps=params["num_eval_steps"])
+  print(eval_metrics)
   # end of experiment
   
   # TODO also predict for dev.
