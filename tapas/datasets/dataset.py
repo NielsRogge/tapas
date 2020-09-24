@@ -34,6 +34,8 @@ def read_dataset(
 ):
   """Returns an input_fn that can be used with the tf.Estimator API."""
   with tf.variable_scope(name):
+    if "batch_size" not in params:
+      batch_size = 4
     batch_size = params["batch_size"]
     # This is used mainly by the test to remove any source of randomness.
     cycle_length = params.get("cycle_length", 64)
