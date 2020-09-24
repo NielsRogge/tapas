@@ -269,7 +269,8 @@ def _calculate_aggregation_loss(logits_aggregation, aggregate_mask,
         logits_aggregation, aggregate_mask)
   per_example_aggregation_loss = tf.Print(per_example_aggregation_loss,
                                           [per_example_aggregation_loss],
-                                          "Per example aggregation loss"
+                                          "Per example aggregation loss",
+                                          summarize=-1
   ) 
   
   return config.aggregation_loss_importance * per_example_aggregation_loss
@@ -450,7 +451,8 @@ def _calculate_aggregate_mask(answer, output_layer_aggregation, output_bias_agg,
   
   aggregate_mask = tf.Print(aggregate_mask,
                             [aggregate_mask],
-                            "Aggregate mask"
+                            "Aggregate mask",
+                            summarize=-1
   ) 
   return aggregate_mask
 
