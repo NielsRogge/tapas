@@ -135,3 +135,5 @@ def compute_column_logits(output_layer,
         tf.equal(out_index.indices, 0), tf.float32)
 
   return column_logits
+
+

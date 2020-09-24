@@ -555,6 +555,12 @@ def _single_column_cell_selection_loss(token_logits, column_logits, label_ids,
   column_dist = tfp.distributions.Categorical(logits=column_logits)
   column_loss_per_example = -column_dist.log_prob(column_label)
 
+  column_loss_per_example = tf.Print(column_loss_per_example,
+                            [column_loss_per_example],
+                            "Column loss per example",
+                            summarize=-1
+  )
+
   # Reduce the labels and logits to per-cell from per-token.
   logits_per_cell, _ = segmented_tensor.reduce_mean(token_logits, cell_index)
   labels_per_cell, labels_index = segmented_tensor.reduce_max(
