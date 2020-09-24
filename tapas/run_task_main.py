@@ -417,7 +417,8 @@ def _train_and_predict(
 
   # If TPU is not available, this will fall back to normal Estimator on CPU/GPU.
   estimator = tf.estimator.tpu.TPUEstimator(
-      params={'gradient_accumulation_steps': gradient_accumulation_steps},
+      params={'gradient_accumulation_steps': gradient_accumulation_steps,
+              'batch_size': 4},
       use_tpu=tpu_options.use_tpu,
       model_fn=model_fn,
       config=run_config,
