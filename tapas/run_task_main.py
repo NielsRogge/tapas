@@ -566,9 +566,8 @@ def _predict_for_set(
     batch_size = 4,
     num_eval_steps=20,
   )
-  eval_input_fn = functools.partial(
-      tapas_classifier_model.input_fn,
-      name='predict',
+  eval_input_fn = tapas_classifier_model.input_fn(
+      name='evaluate',
       file_patterns=example_file,
       data_format='tfrecord',
       compression_type=FLAGS.compression_type,
@@ -581,7 +580,7 @@ def _predict_for_set(
       include_id=False,
       params=params)
   input_fn_args = function_utils.fn_args(eval_input_fn)
-  print(type(input_fn_args))
+  print(input_fn_args)
 
   eval_metrics = estimator.evaluate(input_fn=eval_input_fn, steps=params["num_eval_steps"])
   # end of experiment
