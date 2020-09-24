@@ -580,6 +580,12 @@ def _single_column_cell_selection_loss(token_logits, column_logits, label_ids,
   cell_loss /= tf.reduce_sum(
       column_mask * cell_mask, axis=1) + _EPSILON_ZERO_DIVISION
 
+  cell_loss = tf.Print(cell_loss,
+                            [cell_loss],
+                            "Cell loss",
+                            summarize=-1
+  )
+  
   selection_loss_per_example = column_loss_per_example
   selection_loss_per_example += tf.where(
       no_cell_selected, tf.zeros_like(selection_loss_per_example), cell_loss)

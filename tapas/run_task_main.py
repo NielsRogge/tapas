@@ -581,8 +581,8 @@ def _predict_for_set(
       include_id=False,
   )
   input_fn_args = function_utils.fn_args(eval_input_fn)
-  print(input_fn_args)
-  print(estimator.params)
+  #print(input_fn_args)
+  #print(estimator.params)
 
   eval_metrics = estimator.evaluate(input_fn=eval_input_fn)
   print(eval_metrics)
