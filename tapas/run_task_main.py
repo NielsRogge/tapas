@@ -558,6 +558,29 @@ def _predict_for_set(
     other_prediction_file,
 ):
   """Gets predictions and writes them to TSV file."""
+  # experiment: run evaluation before prediction
+  params = dict(
+    batch_size = 4,
+    num_eval_steps=20,
+  )
+  eval_input_fn = functools.partial(
+      name='evaluate',
+      file_patterns=example_file,
+      data_format='tfrecord',
+      compression_type=FLAGS.compression_type,
+      is_training=False,
+      max_seq_length=FLAGS.max_seq_length,
+      max_predictions_per_seq=_MAX_PREDICTIONS_PER_SEQ,
+      add_aggregation_function_id=do_model_aggregation,
+      add_classification_labels=False,
+      add_answer=use_answer_as_supervision,
+      include_id=False,
+      params=params
+
+  )
+  eval_metrics = estimator.evaluate(input_fn=eval_input_fn, steps=params["num_eval_steps"])
+  # end of experiment
+  
   # TODO also predict for dev.
   predict_input_fn = functools.partial(
       tapas_classifier_model.input_fn,
