@@ -461,6 +461,13 @@ def _calculate_aggregate_mask(answer, output_layer_aggregation, output_bias_agg,
   is_pred_cell_selection = aggregation_ops_total_mass <= cell_select_pref
   # Examples with non-empty cell selection supervision.
   is_cell_supervision_available = tf.reduce_sum(label_ids, axis=1) > 0
+  
+  aggregate_mask_init = tf.Print(aggregate_mask_init,
+                      [aggregate_mask_init],
+                      "Aggregate mask init",
+                      summarize=-1
+    )
+   
   aggregate_mask = tf.where(
       tf.logical_and(is_pred_cell_selection, is_cell_supervision_available),
       tf.zeros_like(aggregate_mask_init, dtype=tf.float32), aggregate_mask_init)
