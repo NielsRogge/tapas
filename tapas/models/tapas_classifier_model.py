@@ -341,6 +341,12 @@ def _calculate_expected_result(dist_per_cell, numeric_values,
                           axis=1)
   expected_result = tf.reduce_sum(
       all_results * aggregation_op_only_probs, axis=1)
+
+  expected_result = tf.Print(expected_result,
+                            [expected_result],
+                            "Expected result",
+                            summarize=-1
+  ) 
   return expected_result
 
 
