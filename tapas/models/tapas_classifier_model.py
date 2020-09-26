@@ -238,6 +238,11 @@ def _calculate_aggregation_loss_known(logits_aggregation, aggregate_mask,
   if config.use_answer_as_supervision:
     # Accumulate loss only for examples requiring cell selection
     # (no aggregation).
+    per_example_aggregation_intermediate = tf.Print(per_example_aggregation_intermediate,
+                                          [per_example_aggregation_intermediate],
+                                          "Per example aggregation intermediate",
+                                          summarize=-1
+    ) 
     return per_example_aggregation_intermediate * (1 - aggregate_mask)
   else:
     return per_example_aggregation_intermediate
