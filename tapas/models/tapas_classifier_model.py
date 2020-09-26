@@ -866,6 +866,12 @@ def _get_classification_outputs(
       per_example_additional_loss = _calculate_aggregation_loss(
           logits_aggregation, aggregate_mask, aggregation_function_id, config)
 
+      per_example_additional_loss = tf.Print(per_example_additional_loss,
+                            [per_example_additional_loss],
+                            "Per example additional loss",
+                            summarize=-1
+      ) 
+
       if config.use_answer_as_supervision:
         # Add regression loss for numeric answers which require aggregation.
         answer_loss, large_answer_loss_mask = _calculate_regression_loss(
