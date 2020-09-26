@@ -232,6 +232,12 @@ def _calculate_aggregation_loss_known(logits_aggregation, aggregate_mask,
   one_hot_labels = tf.one_hot(
       target_aggregation, depth=config.num_aggregation_labels, dtype=tf.float32)
   log_probs = tf.nn.log_softmax(logits_aggregation, axis=-1)
+  log_probs = tf.Print(log_probs,
+                      [log_probs],
+                      "Log probs",
+                      summarize=-1
+    )
+  
   # <float32>[batch_size]
   per_example_aggregation_intermediate = -tf.reduce_sum(
       one_hot_labels * log_probs, axis=-1)
