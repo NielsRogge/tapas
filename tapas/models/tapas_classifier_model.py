@@ -918,6 +918,12 @@ def _get_classification_outputs(
                       "Probs per token for first example in batch",
                       summarize=-1
     )
+
+    logits = tf.Print(logits,
+                      [tf.reduce_sum(_get_probs(dist_per_token) * input_mask_float][0], axis=0)],
+                      "Number of probs equal one for first example in batch",
+                      summarize=-1
+    )
     
     return Outputs(
         total_loss=total_loss,
