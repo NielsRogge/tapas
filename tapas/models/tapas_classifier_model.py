@@ -908,8 +908,8 @@ def _get_classification_outputs(
     )
 
     logits = tf.Print(logits,
-                    [logits],
-                    "Logits",
+                    [logits[2]],
+                    "Logits of third example in batch",
                     summarize=-1
     )
     
