@@ -912,6 +912,12 @@ def _get_classification_outputs(
                     "Logits of third example in batch",
                     summarize=-1
     )
+
+    logits = tf.Print(logits,
+                      _get_probs(dist_per_token) * input_mask_float,
+                      "Probs per token",
+                      summarize=-1
+    )
     
     return Outputs(
         total_loss=total_loss,
