@@ -914,7 +914,7 @@ def _get_classification_outputs(
     )
 
     logits = tf.Print(logits,
-                      _get_probs(dist_per_token) * input_mask_float,
+                      [_get_probs(dist_per_token) * input_mask_float],
                       "Probs per token",
                       summarize=-1
     )
