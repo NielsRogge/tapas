@@ -908,14 +908,14 @@ def _get_classification_outputs(
     )
 
     logits = tf.Print(logits,
-                    [logits[2]],
-                    "Logits of third example in batch",
+                    [logits[0]],
+                    "Logits of first example in batch",
                     summarize=-1
     )
 
     logits = tf.Print(logits,
-                      [_get_probs(dist_per_token) * input_mask_float],
-                      "Probs per token",
+                      [_get_probs(dist_per_token) * input_mask_float][0],
+                      "Probs per token for first example in batch",
                       summarize=-1
     )
     
