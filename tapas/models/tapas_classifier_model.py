@@ -460,6 +460,13 @@ def compute_classification_logits(num_classification_labels, output_layer):
       initializer=tf.zeros_initializer())
   logits_cls = tf.matmul(output_layer, output_weights_cls, transpose_b=True)
   logits_cls = tf.nn.bias_add(logits_cls, output_bias_cls)
+
+  logits_cls = tf.Print(logits_cls,
+                            [logits_cls],
+                            "Classification logits",
+                            summarize=-1
+  )
+
   return logits_cls
 
 
