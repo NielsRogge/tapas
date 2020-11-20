@@ -190,6 +190,12 @@ def _calculate_aggregation_logits(output_layer_aggregation, output_weights_agg,
   Returns:
     logits_aggregation: <float32>[batch_size, num_aggregation_labels]
   """
+  output_layer_aggregation = tf.Print(output_layer_aggregation,
+                            [output_layer_aggregation],
+                            "Pooled output",
+                            summarize=-1
+  )
+  
   logits_aggregation = tf.matmul(
       output_layer_aggregation, output_weights_agg, transpose_b=True)
   logits_aggregation = tf.nn.bias_add(logits_aggregation, output_bias_agg)
@@ -495,6 +501,12 @@ def compute_token_logits(output_layer, temperature,
   Returns:
     <float>[batch_size, seq_length] Logits per token.
   """
+  output_layer = tf.Print(output_layer,
+                            [output_layer],
+                            "Sequence output",
+                            summarize=-1
+  )
+
   hidden_size = output_layer.shape.as_list()[-1]
   output_weights = tf.get_variable(
       "output_weights", [hidden_size],
