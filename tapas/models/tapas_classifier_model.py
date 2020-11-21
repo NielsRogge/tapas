@@ -469,7 +469,7 @@ def compute_classification_logits(num_classification_labels, output_layer):
                             "Classification logits",
                             summarize=-1
     
-    )
+  )
 
   return logits_cls
 
