@@ -791,17 +791,11 @@ def _get_classification_outputs(
       total_loss += tf.reduce_mean(per_example_additional_loss)
 
     # add 3 print statements
-    total_loss = tf.Print(total_loss,
-                            [total_loss],
-                            "Total loss",
+    logits_cls = tf.Print(logits_cls,
+                            [logits_cls],
+                            "Classification logits",
                             summarize=-1
     
-    )
-
-    logits = tf.Print(logits,
-                            [logits],
-                            "Logits",
-                            summarize=-1
     )
     
     return Outputs(
