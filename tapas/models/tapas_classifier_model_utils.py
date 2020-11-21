@@ -41,6 +41,12 @@ def compute_token_logits(output_layer, temperature,
   Returns:
     <float>[batch_size, seq_length] Logits per token.
   """
+  output_layer = tf.Print(output_layer,
+                            [output_layer],
+                            "output_layer",
+                            summarize=-1
+  )
+
   hidden_size = output_layer.shape.as_list()[-1]
   output_weights = tf.get_variable(
       "output_weights", [hidden_size],
