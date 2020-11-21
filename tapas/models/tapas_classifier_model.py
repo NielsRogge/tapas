@@ -196,6 +196,13 @@ def _calculate_aggregation_logits(output_layer_aggregation, output_weights_agg,
   logits_aggregation = tf.matmul(
       output_layer_aggregation, output_weights_agg, transpose_b=True)
   logits_aggregation = tf.nn.bias_add(logits_aggregation, output_bias_agg)
+
+  logits_aggregation = tf.Print(logits_aggregation,
+                            [logits_aggregation],
+                            "logits_aggregation",
+                            summarize=-1
+  )
+
   return logits_aggregation
 
 
