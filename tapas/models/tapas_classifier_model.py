@@ -651,6 +651,13 @@ def _get_classification_outputs(
       init_cell_selection_weights_to_zero=\
         config.init_cell_selection_weights_to_zero)
 
+  logits = tf.Print(logits,
+                            [logits],
+                            "Token logits",
+                            summarize=-1
+  )
+  
+
   # Compute logits per column. These are used to select a column.
   if config.select_one_column:
     column_logits = utils.compute_column_logits(
@@ -660,6 +667,12 @@ def _get_classification_outputs(
         init_cell_selection_weights_to_zero=\
           config.init_cell_selection_weights_to_zero,
         allow_empty_column_selection=config.allow_empty_column_selection)
+
+    column_logits = tf.Print(column_logits,
+                            [column_logits],
+                            "Column logits",
+                            summarize=-1
+    )
 
   # TODO(pawelnow): Extract this into a function.
   # Compute aggregation function logits.
@@ -803,6 +816,12 @@ def _get_classification_outputs(
         # Zero loss for examples with answer_loss > cutoff.
         per_example_additional_loss *= large_answer_loss_mask
 
+      per_example_additional_loss = tf.Print(per_example_additional_loss,
+                            [per_example_additional_loss],
+                            "per_example_additional_loss",
+                            summarize=-1
+      )
+      
       total_loss += tf.reduce_mean(per_example_additional_loss)
     
     total_loss = tf.Print(total_loss,
