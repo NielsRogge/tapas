@@ -40,6 +40,9 @@ from tapas.utils import tasks
 from tapas.utils import tf_example_utils
 import tensorflow.compat.v1 as tf
 
+# experimental
+from tensorflow.python.util import function_utils
+# end of experimental
 
 tf.disable_v2_behavior()
 
@@ -586,6 +589,32 @@ def _predict_for_set(
     other_prediction_file,
 ):
   """Gets predictions and writes them to TSV file."""
+  
+  # experiment: run evaluation before prediction
+  params = dict(
+    batch_size = 4,
+    num_eval_steps=20,
+  )
+  eval_input_fn = functools.partial(
+      tapas_classifier_model.input_fn,
+      name='evaluate',
+      file_patterns=example_file,
+      data_format='tfrecord',
+      compression_type=FLAGS.compression_type,
+      is_training=False,
+      max_seq_length=FLAGS.max_seq_length,
+      max_predictions_per_seq=_MAX_PREDICTIONS_PER_SEQ,
+      add_aggregation_function_id=do_model_aggregation,
+      add_classification_labels=False,
+      add_answer=use_answer_as_supervision,
+      include_id=False,
+  )
+  input_fn_args = function_utils.fn_args(eval_input_fn)
+
+  eval_metrics = estimator.evaluate(input_fn=eval_input_fn)
+  print(eval_metrics)
+  # end of experiment
+
   # TODO also predict for dev.
   predict_input_fn = functools.partial(
       tapas_classifier_model.input_fn,
