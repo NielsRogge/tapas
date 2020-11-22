@@ -652,8 +652,8 @@ def _get_classification_outputs(
         config.init_cell_selection_weights_to_zero)
 
   logits = tf.Print(logits,
-                            [logits],
-                            "Token logits",
+                            [logits[2]],
+                            "Token logits of third example",
                             summarize=-1
   )
   
@@ -669,8 +669,8 @@ def _get_classification_outputs(
         allow_empty_column_selection=config.allow_empty_column_selection)
 
     column_logits = tf.Print(column_logits,
-                            [column_logits],
-                            "Column logits",
+                            [column_logits[2]],
+                            "Column logits of third example",
                             summarize=-1
     )
 
