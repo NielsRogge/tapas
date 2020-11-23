@@ -116,6 +116,12 @@ def compute_column_logits(output_layer,
                               tf.not_equal(out_index.indices, 0))
   column_logits += CLOSE_ENOUGH_TO_LOG_ZERO * tf.cast(is_padding, tf.float32)
 
+  column_logits = tf.Print(column_logits,
+                            [column_logits],
+                            "Column logits after padding",
+                            summarize=-1
+  )
+  
   if not allow_empty_column_selection:
     column_logits += CLOSE_ENOUGH_TO_LOG_ZERO * tf.cast(
         tf.equal(out_index.indices, 0), tf.float32)

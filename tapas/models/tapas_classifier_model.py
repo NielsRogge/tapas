@@ -370,6 +370,12 @@ def _calculate_regression_loss(answer, aggregate_mask, dist_per_cell,
                                                numeric_values_scale,
                                                input_mask_float,
                                                logits_aggregation, config)
+  expected_result = tf.Print(expected_result,
+                            [expected_result],
+                            "expected_result",
+                            summarize=-1
+  )
+  
   # <float32>[batch_size]
   answer_masked = tf.where(tf.is_nan(answer), tf.zeros_like(answer), answer)
 
@@ -401,6 +407,20 @@ def _calculate_regression_loss(answer, aggregate_mask, dist_per_cell,
         tf.ones_like(per_example_answer_loss, dtype=tf.float32))
   per_example_answer_loss_scaled = config.answer_loss_importance * (
       per_example_answer_loss * aggregate_mask)
+  
+  per_example_answer_loss_scaled = tf.Print(per_example_answer_loss_scaled,
+                            [per_example_answer_loss_scaled],
+                            "per_example_answer_loss_scaled",
+                            summarize=-1
+  )
+
+  large_answer_loss_mask = tf.Print(large_answer_loss_mask,
+                            [large_answer_loss_mask],
+                            "large_answer_loss_mask",
+                            summarize=-1
+  )
+  
+  
   return per_example_answer_loss_scaled, large_answer_loss_mask
 
 
@@ -446,6 +466,13 @@ def _calculate_aggregate_mask(answer, output_layer_aggregation, output_bias_agg,
       tf.logical_and(is_pred_cell_selection, is_cell_supervision_available),
       tf.zeros_like(aggregate_mask_init, dtype=tf.float32), aggregate_mask_init)
   aggregate_mask = tf.stop_gradient(aggregate_mask)
+
+  aggregate_mask = tf.Print(aggregate_mask,
+                            [aggregate_mask],
+                            "aggregate_mask",
+                            summarize=-1
+  )
+
   return aggregate_mask
 
 
@@ -559,6 +586,12 @@ def _single_column_cell_selection_loss(token_logits, column_logits, label_ids,
       1.0 - cell_mask * selected_column_mask)
   logits = segmented_tensor.gather(logits_per_cell, cell_index)
 
+  selection_loss_per_example = tf.Print(selection_loss_per_example,
+                            [selection_loss_per_example],
+                            "selection_loss_per_example",
+                            summarize=-1
+  )
+  
   return selection_loss_per_example, logits
 
 
