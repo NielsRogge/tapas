@@ -197,11 +197,11 @@ def _calculate_aggregation_logits(output_layer_aggregation, output_weights_agg,
       output_layer_aggregation, output_weights_agg, transpose_b=True)
   logits_aggregation = tf.nn.bias_add(logits_aggregation, output_bias_agg)
 
-  logits_aggregation = tf.Print(logits_aggregation,
-                            [logits_aggregation],
-                            "logits_aggregation",
-                            summarize=-1
-  )
+  # logits_aggregation = tf.Print(logits_aggregation,
+  #                           [logits_aggregation],
+  #                           "logits_aggregation",
+  #                           summarize=-1
+  # )
 
   return logits_aggregation
 
@@ -370,11 +370,11 @@ def _calculate_regression_loss(answer, aggregate_mask, dist_per_cell,
                                                numeric_values_scale,
                                                input_mask_float,
                                                logits_aggregation, config)
-  expected_result = tf.Print(expected_result,
-                            [expected_result],
-                            "expected_result",
-                            summarize=-1
-  )
+  # expected_result = tf.Print(expected_result,
+  #                           [expected_result],
+  #                           "expected_result",
+  #                           summarize=-1
+  # )
   
   # <float32>[batch_size]
   answer_masked = tf.where(tf.is_nan(answer), tf.zeros_like(answer), answer)
@@ -397,6 +397,13 @@ def _calculate_regression_loss(answer, aggregate_mask, dist_per_cell,
         expected_result * aggregate_mask,
         delta=tf.cast(config.huber_loss_delta, tf.float32),
         reduction=tf.losses.Reduction.NONE)
+  
+  per_example_answer_loss = tf.Print(per_example_answer_loss,
+                            [per_example_answer_loss],
+                            "per_example_answer_loss (Huber loss)",
+                            summarize=-1
+  )
+  
   if config.answer_loss_cutoff is None:
     large_answer_loss_mask = tf.ones_like(
         per_example_answer_loss, dtype=tf.float32)
@@ -458,6 +465,13 @@ def _calculate_aggregate_mask(answer, output_layer_aggregation, output_bias_agg,
   dist_aggregation = tfp.distributions.Categorical(logits=logits_aggregation)
   aggregation_ops_total_mass = tf.reduce_sum(
       _get_probs(dist_aggregation)[:, 1:], axis=1)
+
+  aggregation_ops_total_mass = tf.Print(aggregation_ops_total_mass,
+                            [aggregation_ops_total_mass],
+                            "aggregation_ops_total_mass",
+                            summarize=-1
+  )
+
   # Cell selection examples according to current model.
   is_pred_cell_selection = aggregation_ops_total_mass <= cell_select_pref
   # Examples with non-empty cell selection supervision.
@@ -498,11 +512,11 @@ def compute_classification_logits(num_classification_labels, output_layer):
   logits_cls = tf.matmul(output_layer, output_weights_cls, transpose_b=True)
   logits_cls = tf.nn.bias_add(logits_cls, output_bias_cls)
 
-  logits_cls = tf.Print(logits_cls,
-                            [logits_cls],
-                            "logits_cls",
-                            summarize=-1
-  )
+  # logits_cls = tf.Print(logits_cls,
+  #                           [logits_cls],
+  #                           "logits_cls",
+  #                           summarize=-1
+  # )
 
 
   return logits_cls
@@ -585,12 +599,6 @@ def _single_column_cell_selection_loss(token_logits, column_logits, label_ids,
   logits_per_cell += _CLOSE_ENOUGH_TO_LOG_ZERO * (
       1.0 - cell_mask * selected_column_mask)
   logits = segmented_tensor.gather(logits_per_cell, cell_index)
-
-  selection_loss_per_example = tf.Print(selection_loss_per_example,
-                            [selection_loss_per_example],
-                            "selection_loss_per_example",
-                            summarize=-1
-  )
   
   return selection_loss_per_example, logits
 
@@ -684,11 +692,11 @@ def _get_classification_outputs(
       init_cell_selection_weights_to_zero=\
         config.init_cell_selection_weights_to_zero)
 
-  logits = tf.Print(logits,
-                            [logits[2]],
-                            "Token logits of third example",
-                            summarize=-1
-  )
+  # logits = tf.Print(logits,
+  #                           [logits[2]],
+  #                           "Token logits of third example",
+  #                           summarize=-1
+  # )
   
 
   # Compute logits per column. These are used to select a column.
@@ -701,11 +709,11 @@ def _get_classification_outputs(
           config.init_cell_selection_weights_to_zero,
         allow_empty_column_selection=config.allow_empty_column_selection)
 
-    column_logits = tf.Print(column_logits,
-                            [column_logits[2]],
-                            "Column logits of third example",
-                            summarize=-1
-    )
+    # column_logits = tf.Print(column_logits,
+    #                         [column_logits[2]],
+    #                         "Column logits of third example",
+    #                         summarize=-1
+    # )
 
   # TODO(pawelnow): Extract this into a function.
   # Compute aggregation function logits.
@@ -781,6 +789,12 @@ def _get_classification_outputs(
           cell_mask=cell_mask)
       dist_per_token = tfp.distributions.Bernoulli(logits=logits)
 
+    selection_loss_per_example = tf.Print(selection_loss_per_example,
+                            [selection_loss_per_example],
+                            "selection_loss_per_example",
+                            summarize=-1
+    )
+    
     ### Logits for the aggregation function
     #########################################
 
@@ -840,6 +854,12 @@ def _get_classification_outputs(
       per_example_additional_loss = _calculate_aggregation_loss(
           logits_aggregation, aggregate_mask, aggregation_function_id, config)
 
+      per_example_additional_loss = tf.Print(per_example_additional_loss,
+                            [per_example_additional_loss],
+                            "per_example_additional_loss (only for cell selection examples)",
+                            summarize=-1
+      )
+      
       if config.use_answer_as_supervision:
         # Add regression loss for numeric answers which require aggregation.
         answer_loss, large_answer_loss_mask = _calculate_regression_loss(
@@ -851,7 +871,7 @@ def _get_classification_outputs(
 
       per_example_additional_loss = tf.Print(per_example_additional_loss,
                             [per_example_additional_loss],
-                            "per_example_additional_loss",
+                            "per_example_additional_loss (with answer loss)",
                             summarize=-1
       )
       

@@ -41,11 +41,11 @@ def compute_token_logits(output_layer, temperature,
   Returns:
     <float>[batch_size, seq_length] Logits per token.
   """
-  output_layer = tf.Print(output_layer,
-                            [output_layer],
-                            "output_layer",
-                            summarize=-1
-  )
+  # output_layer = tf.Print(output_layer,
+  #                           [output_layer],
+  #                           "output_layer",
+  #                           summarize=-1
+  # )
 
   hidden_size = output_layer.shape.as_list()[-1]
   output_weights = tf.get_variable(
@@ -116,11 +116,11 @@ def compute_column_logits(output_layer,
                               tf.not_equal(out_index.indices, 0))
   column_logits += CLOSE_ENOUGH_TO_LOG_ZERO * tf.cast(is_padding, tf.float32)
 
-  column_logits = tf.Print(column_logits,
-                            [column_logits],
-                            "Column logits after padding",
-                            summarize=-1
-  )
+  # column_logits = tf.Print(column_logits,
+  #                           [column_logits],
+  #                           "Column logits after padding",
+  #                           summarize=-1
+  # )
   
   if not allow_empty_column_selection:
     column_logits += CLOSE_ENOUGH_TO_LOG_ZERO * tf.cast(
