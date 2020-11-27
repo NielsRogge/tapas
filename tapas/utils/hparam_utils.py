@@ -51,10 +51,16 @@ def get_hparams(task):
         'train_batch_size': 128,
         'warmup_ratio': 0.01,
     }
+  # params = {
+  #     'grad_clipping': 10.0,
+  #     'num_train_examples': 50000 * 512,
+  #     'train_batch_size': 512,
+  # }
+  # we replace params by this:
   params = {
       'grad_clipping': 10.0,
-      'num_train_examples': 50000 * 512,
-      'train_batch_size': 512,
+      'num_train_examples': 8 * 1,
+      'train_batch_size': 1,
   }
   if task == tasks.Task.WTQ:
     params.update({
