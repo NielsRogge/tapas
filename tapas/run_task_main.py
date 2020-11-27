@@ -467,7 +467,7 @@ def _train_and_predict(
     estimator.train(
         input_fn=train_input_fn,
         #max_steps=tapas_config.num_train_steps,
-        max_steps=None,
+        max_steps=50008,
     )
 
   elif mode == Mode.PREDICT_AND_EVALUATE or mode == Mode.PREDICT:
