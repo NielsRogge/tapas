@@ -72,7 +72,8 @@ def get_hparams(task):
         'select_one_column': True,
         'allow_empty_column_selection': False,
         'temperature': 0.0352513,
-        'warmup_ratio': 0.128960,
+        #'warmup_ratio': 0.128960,
+        'warmup_ratio': 0.0,
     })
   elif task == tasks.Task.WIKISQL:
     params.update({
