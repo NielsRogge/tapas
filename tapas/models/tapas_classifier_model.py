@@ -801,6 +801,12 @@ def _get_classification_outputs(
                                   "logits_aggregation",
                                   summarize=-1
     )
+
+    logits_cls = tf.Print(logits_cls,
+                          [logits_cls],
+                          "logits_cls",
+                          summarize=-1
+    )
     
     return Outputs(
         total_loss=total_loss,
