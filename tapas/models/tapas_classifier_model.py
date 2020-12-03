@@ -629,7 +629,7 @@ def _get_classification_outputs(
     Outputs
   """
   output_layer = tf.Print(output_layer,
-                                  [output_layer],
+                                  [output_layer[:, :3, :3]],
                                   "sequence_output",
                                   summarize=-1
   )
