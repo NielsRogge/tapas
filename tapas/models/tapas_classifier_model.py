@@ -193,6 +193,7 @@ def _calculate_aggregation_logits(output_layer_aggregation, output_weights_agg,
   Returns:
     logits_aggregation: <float32>[batch_size, num_aggregation_labels]
   """
+  
   logits_aggregation = tf.matmul(
       output_layer_aggregation, output_weights_agg, transpose_b=True)
   logits_aggregation = tf.nn.bias_add(logits_aggregation, output_bias_agg)
@@ -627,6 +628,18 @@ def _get_classification_outputs(
   Returns:
     Outputs
   """
+  output_layer = tf.Print(output_layer,
+                                  [output_layer],
+                                  "sequence_output",
+                                  summarize=-1
+  )
+  
+  output_layer_aggregation = tf.Print(output_layer_aggregation,
+                                  [output_layer_aggregation],
+                                  "pooled_output",
+                                  summarize=-1
+  )
+  
   if is_training:
     # I.e., 0.1 dropout
     output_layer = tf.nn.dropout(output_layer, keep_prob=0.9)
