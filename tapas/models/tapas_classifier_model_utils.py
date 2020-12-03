@@ -52,7 +52,7 @@ def compute_token_logits(output_layer, temperature,
             output_bias) / temperature
 
   logits = tf.Print(logits,
-                      [logits[:,:3]],
+                      [logits],
                       "logits",
                       summarize=-1
   )
