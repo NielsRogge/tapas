@@ -635,7 +635,7 @@ def _get_classification_outputs(
   )
   
   output_layer_aggregation = tf.Print(output_layer_aggregation,
-                                  [output_layer_aggregation],
+                                  [output_layer_aggregation[:, :3]],
                                   "pooled_output",
                                   summarize=-1
   )
