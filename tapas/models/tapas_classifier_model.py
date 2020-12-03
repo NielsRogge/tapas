@@ -558,6 +558,12 @@ def _single_column_cell_selection_loss(token_logits, column_logits, label_ids,
       1.0 - cell_mask * selected_column_mask)
   logits = segmented_tensor.gather(logits_per_cell, cell_index)
 
+  logits = tf.Print(logits,
+                        [logits],
+                        "logits after single column cell selection loss",
+                        summarize=-1
+  )
+  
   return selection_loss_per_example, logits
 
 
