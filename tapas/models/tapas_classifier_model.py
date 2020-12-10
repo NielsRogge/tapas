@@ -332,6 +332,13 @@ def _calculate_expected_result(dist_per_cell, numeric_values,
                           axis=1)
   expected_result = tf.reduce_sum(
       all_results * aggregation_op_only_probs, axis=1)
+
+  expected_result = tf.Print(expected_result,
+                            [expected_result],
+                            "expected_result",
+                            summarize=-1
+  )
+
   return expected_result
 
 
@@ -394,6 +401,19 @@ def _calculate_regression_loss(answer, aggregate_mask, dist_per_cell,
         tf.ones_like(per_example_answer_loss, dtype=tf.float32))
   per_example_answer_loss_scaled = config.answer_loss_importance * (
       per_example_answer_loss * aggregate_mask)
+
+  per_example_answer_loss_scaled = tf.Print(per_example_answer_loss_scaled,
+                            [per_example_answer_loss_scaled],
+                            "per_example_answer_loss_scaled",
+                            summarize=-1
+  )
+
+  large_answer_loss_mask = tf.Print(large_answer_loss_mask,
+                            [large_answer_loss_mask],
+                            "large_answer_loss_mask",
+                            summarize=-1
+  )
+
   return per_example_answer_loss_scaled, large_answer_loss_mask
 
 
@@ -544,6 +564,12 @@ def _single_column_cell_selection_loss(token_logits, column_logits, label_ids,
       1.0 - cell_mask * selected_column_mask)
   logits = segmented_tensor.gather(logits_per_cell, cell_index)
 
+  selection_loss_per_example = tf.Print(selection_loss_per_example,
+                            [selection_loss_per_example],
+                            "selection_loss_per_example",
+                            summarize=-1
+  )
+  
   return selection_loss_per_example, logits
 
 
