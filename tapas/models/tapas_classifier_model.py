@@ -370,11 +370,11 @@ def _calculate_regression_loss(answer, aggregate_mask, dist_per_cell,
                                                numeric_values_scale,
                                                input_mask_float,
                                                logits_aggregation, config)
-  # expected_result = tf.Print(expected_result,
-  #                           [expected_result],
-  #                           "expected_result",
-  #                           summarize=-1
-  # )
+  expected_result = tf.Print(expected_result,
+                            [expected_result],
+                            "expected_result",
+                            summarize=-1
+  )
   
   # <float32>[batch_size]
   answer_masked = tf.where(tf.is_nan(answer), tf.zeros_like(answer), answer)
@@ -691,13 +691,6 @@ def _get_classification_outputs(
       temperature=config.temperature,
       init_cell_selection_weights_to_zero=\
         config.init_cell_selection_weights_to_zero)
-
-  # logits = tf.Print(logits,
-  #                           [logits[2]],
-  #                           "Token logits of third example",
-  #                           summarize=-1
-  # )
-  
 
   # Compute logits per column. These are used to select a column.
   if config.select_one_column:
