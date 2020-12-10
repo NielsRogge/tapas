@@ -65,7 +65,7 @@ def get_hparams(task):
   if task == tasks.Task.WTQ:
     params.update({
         #'answer_loss_cutoff': 0.664694,
-        'answer_loss_cutoff': 0.0,
+        'answer_loss_cutoff': None,
         'cell_select_pref': 0.207951,
         'huber_loss_delta': 0.121194,
         'init_cell_selection_weights_to_zero': True,
