@@ -59,7 +59,7 @@ def get_hparams(task):
   # we replace params by this:
   params = {
       'grad_clipping': 10.0,
-      'num_train_examples': 8 * 1,
+      'num_train_examples': 10 * 1,
       'train_batch_size': 1,
   }
   if task == tasks.Task.WTQ:
