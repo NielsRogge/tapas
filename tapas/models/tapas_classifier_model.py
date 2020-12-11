@@ -197,11 +197,11 @@ def _calculate_aggregation_logits(output_layer_aggregation, output_weights_agg,
       output_layer_aggregation, output_weights_agg, transpose_b=True)
   logits_aggregation = tf.nn.bias_add(logits_aggregation, output_bias_agg)
 
-  # logits_aggregation = tf.Print(logits_aggregation,
-  #                           [logits_aggregation],
-  #                           "logits_aggregation",
-  #                           summarize=-1
-  # )
+  logits_aggregation = tf.Print(logits_aggregation,
+                            [logits_aggregation],
+                            "logits_aggregation",
+                            summarize=-1
+  )
 
   return logits_aggregation
 
@@ -559,8 +559,20 @@ def _single_column_cell_selection_loss(token_logits, column_logits, label_ids,
   column_label = tf.where(no_cell_selected, tf.zeros_like(column_label),
                           column_label)
 
+  column_label = tf.Print(column_label,
+                            [column_label],
+                            "column_label",
+                            summarize=-1
+  )
+
   column_dist = tfp.distributions.Categorical(logits=column_logits)
   column_loss_per_example = -column_dist.log_prob(column_label)
+
+  column_loss_per_example = tf.Print(column_loss_per_example,
+                            [column_loss_per_example],
+                            "column_loss_per_example",
+                            summarize=-1
+  )
 
   # Reduce the labels and logits to per-cell from per-token.
   logits_per_cell, _ = segmented_tensor.reduce_mean(token_logits, cell_index)
@@ -573,6 +585,12 @@ def _single_column_cell_selection_loss(token_logits, column_logits, label_ids,
       tf.equal(column_id_for_cells, tf.expand_dims(column_label, axis=1)),
       tf.float32)
 
+  column_mask = tf.Print(column_mask,
+                            [column_mask],
+                            "column_mask",
+                            summarize=-1
+  )
+
   # Compute the log-likelihood for cells, but only for the selected column.
   cell_dist = tfp.distributions.Bernoulli(logits=logits_per_cell)
   cell_log_prob = cell_dist.log_prob(labels_per_cell)
@@ -582,8 +600,21 @@ def _single_column_cell_selection_loss(token_logits, column_logits, label_ids,
       column_mask * cell_mask, axis=1) + _EPSILON_ZERO_DIVISION
 
   selection_loss_per_example = column_loss_per_example
+
+  selection_loss_per_example = tf.Print(selection_loss_per_example,
+                            [selection_loss_per_example],
+                            "selection_loss_per_example before tf.where",
+                            summarize=-1
+  )
+
   selection_loss_per_example += tf.where(
       no_cell_selected, tf.zeros_like(selection_loss_per_example), cell_loss)
+
+  selection_loss_per_example = tf.Print(selection_loss_per_example,
+                            [selection_loss_per_example],
+                            "selection_loss_per_example",
+                            summarize=-1
+  )
 
   # Set the probs outside the selected column (selected by the *model*)
   # to 0. This ensures backwards compatibility with models that select
@@ -702,12 +733,6 @@ def _get_classification_outputs(
           config.init_cell_selection_weights_to_zero,
         allow_empty_column_selection=config.allow_empty_column_selection)
 
-    # column_logits = tf.Print(column_logits,
-    #                         [column_logits[2]],
-    #                         "Column logits of third example",
-    #                         summarize=-1
-    # )
-
   # TODO(pawelnow): Extract this into a function.
   # Compute aggregation function logits.
   do_model_aggregation = config.num_aggregation_labels > 0
@@ -781,12 +806,6 @@ def _get_classification_outputs(
           col_index=col_index,
           cell_mask=cell_mask)
       dist_per_token = tfp.distributions.Bernoulli(logits=logits)
-
-    selection_loss_per_example = tf.Print(selection_loss_per_example,
-                            [selection_loss_per_example],
-                            "selection_loss_per_example",
-                            summarize=-1
-    )
     
     ### Logits for the aggregation function
     #########################################
