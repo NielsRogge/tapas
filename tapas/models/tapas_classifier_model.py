@@ -565,6 +565,12 @@ def _single_column_cell_selection_loss(token_logits, column_logits, label_ids,
                             summarize=-1
   )
 
+  column_logits = tf.Print(column_logits,
+                            [column_logits],
+                            "column_logits",
+                            summarize=-1
+  )
+
   column_dist = tfp.distributions.Categorical(logits=column_logits)
   column_loss_per_example = -column_dist.log_prob(column_label)
 

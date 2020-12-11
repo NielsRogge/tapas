@@ -97,12 +97,24 @@ def compute_column_logits(output_layer,
       tf.einsum("bsj,j->bs", output_layer, column_output_weights) +
       column_output_bias)
 
+  token_logits = tf.Print(token_logits,
+                            [token_logits],
+                            "Token logits when computing column logits",
+                            summarize=-1
+  )
+
   # Average the logits per cell and then per column.
   # Note that by linearity it doesn't matter if we do the averaging on the
   # embeddings or on the logits. For performance we do the projection first.
   # [batch_size, max_num_cols * max_num_rows]
   cell_logits, cell_logits_index = segmented_tensor.reduce_mean(
       token_logits, cell_index)
+
+  cell_logits = tf.Print(cell_logits,
+                            [cell_logits],
+                            "cell_logits",
+                            summarize=-1
+  )
 
   column_index = cell_index.project_inner(cell_logits_index)
   # [batch_size, max_num_cols]
@@ -111,16 +123,22 @@ def compute_column_logits(output_layer,
   cell_count, _ = segmented_tensor.reduce_sum(cell_mask, column_index)
   column_logits /= cell_count + EPSILON_ZERO_DIVISION
 
+  column_logits = tf.Print(column_logits,
+                            [column_logits],
+                            "Column logits before padding",
+                            summarize=-1
+  )
+
   # Mask columns that do not appear in the example.
   is_padding = tf.logical_and(cell_count < 0.5,
                               tf.not_equal(out_index.indices, 0))
   column_logits += CLOSE_ENOUGH_TO_LOG_ZERO * tf.cast(is_padding, tf.float32)
 
-  # column_logits = tf.Print(column_logits,
-  #                           [column_logits],
-  #                           "Column logits after padding",
-  #                           summarize=-1
-  # )
+  column_logits = tf.Print(column_logits,
+                            [column_logits],
+                            "Column logits after padding",
+                            summarize=-1
+  )
   
   if not allow_empty_column_selection:
     column_logits += CLOSE_ENOUGH_TO_LOG_ZERO * tf.cast(
